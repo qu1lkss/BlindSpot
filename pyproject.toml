@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools==80.9.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "blindspot"
+version = "0.1.0"
+description = "Локальная диагностика слабых мест моделей табличной классификации"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = []
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+blindspot = ["web/*.html", "web/*.css", "web/*.js"]
