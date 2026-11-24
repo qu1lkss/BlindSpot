@@ -1,0 +1,11 @@
+**
+!requirements.lock
+!src/
+!src/blindspot/
+!src/blindspot/*.py
+!src/blindspot/adapters/
+!src/blindspot/adapters/*.py
+!src/blindspot/web/
+!src/blindspot/web/*.html
+!src/blindspot/web/*.js
+!src/blindspot/web/*.css

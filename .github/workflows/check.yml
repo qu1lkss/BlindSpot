@@ -1,22 +1,15 @@
-name: Проверка синтаксиса
-
-on:
-  push:
-  pull_request:
-
+name: Проверка приложения
+on: [push, pull_request]
 permissions:
   contents: read
-
 jobs:
-  syntax:
+  smoke:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: ["3.11", "3.14"]
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: ${{ matrix.python-version }}
-      - name: Проверка Python-модулей
-        run: python -m compileall -q src
+      - run: docker compose up --build --wait
+      - run: docker compose exec -T controller python - < tests/integration/test_storage.py
+      - run: python3 tests/e2e/check_http.py http://127.0.0.1:8765
+      - run: docker run --rm -i --pull never --network none blindspot-controller:0.1.0 python - < tests/e2e/check_offline.py
+      - if: always()
+        run: docker compose down

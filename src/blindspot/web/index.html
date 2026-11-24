@@ -1,17 +1,22 @@
 <!doctype html>
 <html lang="ru">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>BlindSpot</title>
-    <link rel="stylesheet" href="styles.css">
-    <script src="app.js" defer></script>
-  </head>
-  <body>
-    <main>
-      <h1>BlindSpot</h1>
-      <p>Поиск слабых мест моделей машинного обучения.</p>
-      <p>Приложение находится в разработке. Запуск исследований пока недоступен.</p>
-    </main>
-  </body>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Исследования · BlindSpot</title>
+  <link rel="stylesheet" href="/static/styles.css">
+  <script src="/static/app.js" defer></script>
+</head>
+<body>
+  <header><span class="mark" aria-hidden="true"></span> BlindSpot</header>
+  <main>
+    <div class="controls">
+      <h1>Исследования</h1>
+      <button type="button" id="refresh">Обновить</button>
+    </div>
+    <p id="status" role="status">Загрузка исследований…</p>
+    <ul id="studies"></ul>
+    <noscript>Включите JavaScript для просмотра исследований.</noscript>
+  </main>
+</body>
 </html>

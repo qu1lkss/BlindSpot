@@ -32,3 +32,17 @@ dist/
 runs/
 *.log
 *.tmp
+
+/Лабораторные/
+/data/
+/backups/
+/exports/
+/tmp/
+*.sqlite
+*.sqlite3
+*.sqlite*-wal
+*.sqlite*-shm
+*.pem
+*.key
+*.p12
+.secrets/

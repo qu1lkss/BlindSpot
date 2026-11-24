@@ -1,0 +1,21 @@
+name: blindspot
+
+
+services:
+  controller:
+    image: blindspot-controller:0.1.0
+    build: .
+    ports:
+      - "127.0.0.1:${BLINDSPOT_PORT:-8765}:8000"
+    volumes:
+      - studies:/var/lib/blindspot
+    security_opt:
+      - no-new-privileges:true
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/studies', timeout=2).close()"]
+      interval: 5s
+      timeout: 3s
+      retries: 6
+
+volumes:
+  studies:
