@@ -1,0 +1,14 @@
+{
+  "methods": [
+    {
+      "id": "segment",
+      "version": "1",
+      "kind": "segment",
+      "parameters": {},
+      "ranges": {},
+      "prerequisites": "Числовой признак",
+      "impact_limits": "Только отбор строк",
+      "evaluation": "Сравнение с дополнением"
+    }
+  ]
+}

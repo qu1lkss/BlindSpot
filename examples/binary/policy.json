@@ -1,0 +1,30 @@
+{
+  "metrics": [
+    "accuracy",
+    "macro_f1",
+    "recall",
+    "confusion_matrix"
+  ],
+  "threshold": 0.05,
+  "alpha": 0.05,
+  "min_group": 50,
+  "search_fraction": 0.6,
+  "seed": 42,
+  "max_experiments": 100,
+  "search_experiments": 80,
+  "confirmation_experiments": 20,
+  "max_candidates": 20,
+  "memory_mb": 512,
+  "disk_mb": 128,
+  "seconds": {
+    "validation": 300,
+    "preparation": 120,
+    "baseline": 300,
+    "search": 2580,
+    "confirmation": 600,
+    "summary": 120,
+    "total": 3600,
+    "report": 300,
+    "export": 600
+  }
+}

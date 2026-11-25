@@ -1,0 +1,201 @@
+{
+  "columns": [
+    {
+      "name": "id",
+      "role": "id",
+      "type": "string",
+      "description": "id",
+      "unit": null,
+      "precision": null,
+      "nullable": false
+    },
+    {
+      "name": "target",
+      "role": "target",
+      "type": "integer",
+      "description": "target",
+      "unit": null,
+      "precision": null,
+      "nullable": false
+    },
+    {
+      "name": "x0",
+      "role": "feature",
+      "type": "number",
+      "description": "Синтетическое измерение x0",
+      "unit": "усл. ед.",
+      "precision": 4,
+      "nullable": false,
+      "min": -10,
+      "max": 10
+    },
+    {
+      "name": "x1",
+      "role": "feature",
+      "type": "number",
+      "description": "Синтетическое измерение x1",
+      "unit": "усл. ед.",
+      "precision": 4,
+      "nullable": false,
+      "min": -10,
+      "max": 10
+    },
+    {
+      "name": "x2",
+      "role": "feature",
+      "type": "number",
+      "description": "Синтетическое измерение x2",
+      "unit": "усл. ед.",
+      "precision": 4,
+      "nullable": false,
+      "min": -10,
+      "max": 10
+    },
+    {
+      "name": "x3",
+      "role": "feature",
+      "type": "number",
+      "description": "Синтетическое измерение x3",
+      "unit": "усл. ед.",
+      "precision": 4,
+      "nullable": false,
+      "min": -10,
+      "max": 10
+    },
+    {
+      "name": "x4",
+      "role": "feature",
+      "type": "number",
+      "description": "Синтетическое измерение x4",
+      "unit": "усл. ед.",
+      "precision": 4,
+      "nullable": false,
+      "min": -10,
+      "max": 10
+    },
+    {
+      "name": "x5",
+      "role": "feature",
+      "type": "number",
+      "description": "Синтетическое измерение x5",
+      "unit": "усл. ед.",
+      "precision": 4,
+      "nullable": false,
+      "min": -10,
+      "max": 10
+    },
+    {
+      "name": "x6",
+      "role": "feature",
+      "type": "number",
+      "description": "Синтетическое измерение x6",
+      "unit": "усл. ед.",
+      "precision": 4,
+      "nullable": false,
+      "min": -10,
+      "max": 10
+    },
+    {
+      "name": "x7",
+      "role": "feature",
+      "type": "number",
+      "description": "Синтетическое измерение x7",
+      "unit": "усл. ед.",
+      "precision": 4,
+      "nullable": false,
+      "min": -10,
+      "max": 10
+    },
+    {
+      "name": "x8",
+      "role": "feature",
+      "type": "number",
+      "description": "Синтетическое измерение x8",
+      "unit": "усл. ед.",
+      "precision": 4,
+      "nullable": false,
+      "min": -10,
+      "max": 10
+    },
+    {
+      "name": "x9",
+      "role": "feature",
+      "type": "number",
+      "description": "Синтетическое измерение x9",
+      "unit": "усл. ед.",
+      "precision": 4,
+      "nullable": false,
+      "min": -10,
+      "max": 10
+    }
+  ],
+  "features": [
+    "x0",
+    "x1",
+    "x2",
+    "x3",
+    "x4",
+    "x5",
+    "x6",
+    "x7",
+    "x8",
+    "x9"
+  ],
+  "classes": [
+    0,
+    1,
+    2
+  ],
+  "inputs": [
+    {
+      "name": "features",
+      "type": "float32",
+      "columns": [
+        "x0",
+        "x1",
+        "x2",
+        "x3",
+        "x4",
+        "x5",
+        "x6",
+        "x7",
+        "x8",
+        "x9"
+      ]
+    }
+  ],
+  "output": "label",
+  "dependence": "independent",
+  "provenance": {
+    "model": {
+      "author": "Генератор BlindSpot",
+      "source": "examples/generate.py",
+      "received_at": "2026-11-25T00:00:00Z",
+      "version": "1"
+    },
+    "data": {
+      "author": "Генератор BlindSpot",
+      "source": "examples/generate.py",
+      "received_at": "2026-11-25T00:00:00Z",
+      "version": "1"
+    },
+    "passport": {
+      "author": "Генератор BlindSpot",
+      "source": "examples/generate.py",
+      "received_at": "2026-11-25T00:00:00Z",
+      "version": "1"
+    },
+    "policy": {
+      "author": "Генератор BlindSpot",
+      "source": "examples/generate.py",
+      "received_at": "2026-11-25T00:00:00Z",
+      "version": "1"
+    },
+    "methods": {
+      "author": "Генератор BlindSpot",
+      "source": "examples/generate.py",
+      "received_at": "2026-11-25T00:00:00Z",
+      "version": "1"
+    }
+  }
+}

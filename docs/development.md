@@ -48,3 +48,9 @@ docker run --rm -i --pull never --network none blindspot-controller:0.1.0 python
 ```sh
 node tests/e2e/check_browser.cjs http://127.0.0.1:8765
 ```
+
+## Загрузка исследования
+
+Нажмите «Новое исследование», выберите ONNX, CSV или Parquet и три JSON-файла. Кнопка «Загрузить и проверить» сохраняет комплект и открывает протокол. Исправленные файлы можно загрузить отдельным комплектом. Описание полей приведено в [формате входов](inputs.md).
+
+Клиенты API передают в POST заголовки Idempotency-Key и If-Match (целочисленная ревизия, при создании 0). POST /studies принимает multipart-поля model, data, passport, policy, methods. POST /studies/{id}/validate возвращает протокол, GET /studies/{id} открывает сохранённое состояние. Повтор ключа с другим содержимым или устаревшая ревизия дают HTTP 409.

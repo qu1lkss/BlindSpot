@@ -12,10 +12,52 @@
   <main>
     <div class="controls">
       <h1>Исследования</h1>
-      <button type="button" id="refresh">Обновить</button>
+      <div class="buttons">
+        <button type="button" id="refresh">Обновить</button>
+        <button type="button" id="new" class="primary">Новое исследование</button>
+      </div>
     </div>
+    <section class="panel" id="workspace" hidden>
+      <h2 id="workspace-title" tabindex="-1"></h2>
+      <form id="upload" novalidate hidden>
+        <fieldset>
+          <legend>Входные материалы</legend>
+          <div class="files">
+            <div><label for="model">Модель с предобработкой</label>
+              <span id="model-hint">ONNX со встроенными весами</span>
+              <input type="file" id="model" name="model" accept=".onnx" required aria-describedby="model-hint model-error">
+              <p id="model-error" class="field-error"></p></div>
+            <div><label for="data">Размеченные данные</label>
+              <span id="data-hint">CSV в UTF-8 или Parquet</span>
+              <input type="file" id="data" name="data" accept=".csv,.parquet" required aria-describedby="data-hint data-error">
+              <p id="data-error" class="field-error"></p></div>
+            <div><label for="passport">Паспорт модели и данных</label>
+              <span id="passport-hint">JSON со схемой, классами и происхождением</span>
+              <input type="file" id="passport" name="passport" accept=".json" required aria-describedby="passport-hint passport-error">
+              <p id="passport-error" class="field-error"></p></div>
+            <div><label for="policy">Регламент исследования</label>
+              <span id="policy-hint">JSON с настройками и ограничениями</span>
+              <input type="file" id="policy" name="policy" accept=".json" required aria-describedby="policy-hint policy-error">
+              <p id="policy-error" class="field-error"></p></div>
+            <div><label for="methods">Каталог методик</label>
+              <span id="methods-hint">JSON с разрешёнными проверками</span>
+              <input type="file" id="methods" name="methods" accept=".json" required aria-describedby="methods-hint methods-error">
+              <p id="methods-error" class="field-error"></p></div>
+          </div>
+          <button class="primary" type="submit">Загрузить и проверить</button>
+        </fieldset>
+      </form>
+      <p role="status" id="activity"></p>
+      <section id="detail" hidden aria-labelledby="detail-title">
+        <h3 id="detail-title">Проверка входных материалов</h3>
+        <p id="identity" class="metadata"></p>
+        <p id="outcome"></p>
+        <ul id="issues"></ul>
+        <button type="button" id="validate" hidden>Проверить материалы</button>
+      </section>
+    </section>
     <p id="status" role="status">Загрузка исследований…</p>
-    <ul id="studies"></ul>
+    <ul id="studies" aria-label="Сохранённые исследования"></ul>
     <noscript>Включите JavaScript для просмотра исследований.</noscript>
   </main>
 </body>
