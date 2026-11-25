@@ -95,6 +95,12 @@ def create_app(directory: Path) -> FastAPI:
         key, revision = headers
         return store.validate(study_id, revision, key, inspect_inputs)
 
+    @api.post("/studies/{study_id}/prepare")
+    def prepare(study_id: str, headers=Depends(command_headers)):
+        from .versions import prepare_version
+        key, revision = headers
+        return prepare_version(store, study_id, revision, key)
+
     @api.post("/studies/{study_id}/start")
     def start(study_id: str, headers=Depends(command_headers)):
         _, revision = headers

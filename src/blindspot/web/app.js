@@ -13,6 +13,7 @@ let busy = false;
 
 function setBusy(value) {
   busy = value;
+  byId("prepare").disabled = value;
   form.querySelector("fieldset").disabled = value;
   byId("refresh").disabled = value;
   byId("new").disabled = value;
@@ -60,6 +61,10 @@ function clearSelection() {
 
 function showStudy(study) {
   currentStudy = study;
+  byId("prepare").hidden = study.stage !== "проверена";
+  byId("split").textContent = study.preparation
+    ? "Строк для поиска: " + study.preparation.f1_rows + ". Для подтверждения: " + study.preparation.f2_rows + "."
+    : "";
   clearErrors();
   byId("identity").textContent = [study.id, study.stage, "ревизия " + study.revision].join(" · ");
   const report = study.validation;
@@ -237,3 +242,11 @@ form.addEventListener("submit", submitMaterials);
 byId("validate").addEventListener("click", () => runCommand(checkMaterials));
 byId("refresh").addEventListener("click", refreshStudies);
 refreshStudies();
+
+byId("prepare").addEventListener("click", () => runCommand(async () => {
+  const {id, revision} = currentStudy;
+  activity.textContent = "Готовим выборки…";
+  await command("/studies/" + id + "/prepare", revision, "prepare-" + id + "-" + revision);
+  showStudy(await readStudy(id));
+  activity.textContent = "Выборки сохранены.";
+}));

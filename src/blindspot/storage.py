@@ -58,6 +58,9 @@ class StudyStore:
                 );
             """)
 
+            from .versions import install_schema
+            install_schema(db)
+
     def list_studies(self):
         with self.connection() as db:
             return [dict(r) for r in db.execute(
@@ -76,6 +79,8 @@ class StudyStore:
             study = self.row(db, study_id)
             entry = db.execute("SELECT report FROM validation WHERE research_id=?", (study_id,)).fetchone()
             study["validation"] = json.loads(entry["report"]) if entry else None
+            prep = db.execute("SELECT summary FROM preparation WHERE research_id=?", (study_id,)).fetchone()
+            study["preparation"] = json.loads(prep[0]) if prep else None
             return study
 
     @staticmethod
@@ -112,6 +117,8 @@ class StudyStore:
             inputs.rename(root / "inputs")
             db.execute("INSERT INTO research VALUES (?,?,?,0)",
                        (study_id, datetime.now(timezone.utc).isoformat(), "черновик"))
+            from .versions import register_inputs
+            register_inputs(db, study_id, hashes)
             result = self.row(db, study_id)
             self.remember(db, "create", key, request, result)
             return result
@@ -124,6 +131,9 @@ class StudyStore:
             if cached is not None:
                 return cached
             self.check_state(self.row(db, study_id), revision, {"черновик", "проверена"})
+
+            from .versions import input_records, verified
+            verified(self.versions / study_id, input_records(db, study_id))
 
         report = inspect(self.versions / study_id / "inputs")
         with self.connection(write=True) as db:

@@ -14,5 +14,10 @@ jobs:
           docker run --rm --network none -v "$PWD/tests:/app/tests:ro" -v "$PWD/examples:/app/examples:ro" blindspot-controller:0.1.0 python -m unittest discover -s tests/integration
       - run: python3 tests/e2e/check_http.py http://127.0.0.1:8765
       - run: docker run --rm -i --pull never --network none blindspot-controller:0.1.0 python - < tests/e2e/check_offline.py
+      - name: Проверить загрузку, разбиение и границу F2
+        run: |
+          python3 tests/e2e/check_validation.py http://127.0.0.1:8765 examples/binary examples/multiclass
+          python3 tests/e2e/check_versions.py http://127.0.0.1:8765 examples/binary --control-output /tmp/control.json
+          python3 tests/e2e/check_isolation.py /tmp/control.json
       - if: always()
         run: docker compose down

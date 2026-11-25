@@ -17,7 +17,9 @@ class DraftTest(unittest.TestCase):
         incoming = self.root / "incoming"
         incoming.mkdir()
         (incoming / "policy.json").write_text("{}")
-        self.hashes = {"policy.json": digest(incoming / "policy.json")}
+        for name in ("data.csv", "model.onnx", "passport.json", "methods.json"):
+            (incoming / name).touch()
+        self.hashes = {f.name: digest(f) for f in incoming.iterdir()}
         self.study = self.store.create(incoming, self.hashes, "upload")
 
     def test_same_key_keeps_one_version(self):
