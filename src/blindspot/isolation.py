@@ -18,7 +18,7 @@ def search_spec(store, study_id):
     root = store.versions / study_id
     with store.connection() as db:
         study = store.row(db, study_id)
-        store.check_state(study, study["revision"], {"подготовлена"})
+        store.check_state(study, study["revision"], {"подготовлена", "базовый расчёт", "поиск"})
         verified(root, input_records(db, study_id))
         rows = db.execute("SELECT path,sha256 FROM artifact WHERE research_id=? AND access='search' AND ready=1",
                           (study_id,)).fetchall()
@@ -70,6 +70,11 @@ def check_search_input(job):
 if __name__ == "__main__":
     if sys.argv[1:] == ["check"]:
         output = check_search_input(json.load(sys.stdin))
+    elif sys.argv[1:] == ["baseline"]:
+        from .baseline_compute import compute_baseline
+        job = json.load(sys.stdin)
+        check_search_input(job)
+        output = compute_baseline(Path("/input"), Path("/index") / (job["task_id"] + ".parquet"))
     elif len(sys.argv) == 3 and sys.argv[1] == "spec":
         store = StudyStore(Path(os.environ["BLINDSPOT_DATA"]))
         try:

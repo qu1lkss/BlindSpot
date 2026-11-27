@@ -73,4 +73,13 @@ p:empty, ul:empty { display: none; }
 #issues { padding-left: 1.3rem; }
 #studies { list-style: none; padding: 0; }
 #studies li { margin: .6rem 0; }
+#baseline { border-top: 1px solid #d5dfd7; margin-top: 1.2rem; padding-top: 1.2rem; }
+#metrics { overflow-x: auto; }
+#metrics table { border-collapse: collapse; width: 100%; margin: .6rem 0 1.3rem; }
+#metrics caption { text-align: left; font-weight: 650; padding: .4rem 0; }
+#metrics th, #metrics td { padding: .35rem .65rem; text-align: left; border-bottom: 1px solid #d5dfd7; }
+#metrics thead { background: #eef3eb; }
+#metrics tbody th { font-weight: 500; }
+#metrics td { font-variant-numeric: tabular-nums; }
+#predictions { color: #225543; }
 @media (max-width: 36rem) { main { margin: 1.6rem auto; } }

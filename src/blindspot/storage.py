@@ -60,6 +60,8 @@ class StudyStore:
 
             from .versions import install_schema
             install_schema(db)
+            from .baseline import install
+            install(db)
 
     def list_studies(self):
         with self.connection() as db:
@@ -81,6 +83,8 @@ class StudyStore:
             study["validation"] = json.loads(entry["report"]) if entry else None
             prep = db.execute("SELECT summary FROM preparation WHERE research_id=?", (study_id,)).fetchone()
             study["preparation"] = json.loads(prep[0]) if prep else None
+            from .baseline import snapshot
+            study["baseline"] = snapshot(db,study_id)
             return study
 
     @staticmethod

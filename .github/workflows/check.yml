@@ -19,5 +19,11 @@ jobs:
           python3 tests/e2e/check_validation.py http://127.0.0.1:8765 examples/binary examples/multiclass
           python3 tests/e2e/check_versions.py http://127.0.0.1:8765 examples/binary --control-output /tmp/control.json
           python3 tests/e2e/check_isolation.py /tmp/control.json
+      - name: Сверить прогнозы и измерения F1
+        run: |
+          python3 scripts/dispatch_jobs.py > /tmp/blindspot-dispatch.log 2>&1 &
+          dispatcher=$!
+          trap 'kill "$dispatcher" || true' EXIT
+          docker run --rm --network container:blindspot-controller-1 -v "$PWD/tests:/app/tests:ro" -v "$PWD/examples:/app/examples:ro" blindspot-controller:0.1.0 python tests/e2e/check_baseline.py http://127.0.0.1:8000 examples/binary
       - if: always()
         run: docker compose down

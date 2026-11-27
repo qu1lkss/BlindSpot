@@ -3,6 +3,7 @@
 import argparse
 import json
 import subprocess
+from time import time
 from uuid import UUID, uuid4
 
 
@@ -11,7 +12,7 @@ def docker(*args, **kwargs):
                           **kwargs).stdout.strip()
 
 
-def launch(study_id, project, control_id_sha256=None):
+def launch(study_id, project, control_id_sha256=None, *, action="check", task=None, deadline=None, extra=None):
     study_id = str(UUID(study_id))
     controller = docker("compose", "-p", project, "ps", "-q", "controller")
     if not controller:
@@ -20,7 +21,8 @@ def launch(study_id, project, control_id_sha256=None):
     volume = next(m["Name"] for m in container["Mounts"]
                   if m["Type"] == "volume" and m["Destination"] == "/var/lib/blindspot")
     job = json.loads(docker("exec", controller, "python", "-m", "blindspot.isolation", "spec", study_id))
-    job["task_id"] = str(uuid4())
+    job.update(extra or {})
+    job["task_id"] = str(UUID(task)) if task else str(uuid4())
     job["control_id_sha256"] = control_id_sha256
     name = "blindspot-search-" + job["task_id"]
     version = "versions/" + study_id
@@ -35,8 +37,8 @@ def launch(study_id, project, control_id_sha256=None):
             "--mount", mount + "prepared/search,dst=/input,readonly",
             "--mount", mount + "search-work,dst=/index",
             "--tmpfs", f"/work:rw,nosuid,nodev,mode=0700,uid=10001,gid=10001,size={job['disk_mb']}m",
-            container["Image"], "python", "-m", "blindspot.isolation", "check",
-            input=json.dumps(job), timeout=job["seconds"],
+            container["Image"], "python", "-m", "blindspot.isolation", action,
+            input=json.dumps(job), stderr=subprocess.PIPE, timeout=min(job["seconds"], max(0, deadline-time())) if deadline else job["seconds"],
         )
     except (KeyboardInterrupt, subprocess.TimeoutExpired):
         subprocess.run(["docker", "rm", "-f", name], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)

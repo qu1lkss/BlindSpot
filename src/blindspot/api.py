@@ -1,4 +1,5 @@
-from contextlib import asynccontextmanager
+import asyncio
+from contextlib import asynccontextmanager, suppress
 import hashlib
 import os
 from pathlib import Path
@@ -29,8 +30,23 @@ def create_app(directory: Path) -> FastAPI:
 
     @asynccontextmanager
     async def lifespan(app: FastAPI):
+        from .baseline import expire, fail
         store.initialize()
-        yield
+        with store.connection(write=True) as db:
+            for row in db.execute("SELECT research_id,id FROM experiment WHERE status='выполняется'").fetchall():
+                fail(db, *row, "Контроллер перезапущен во время базового расчёта.")
+        async def watch_deadlines():
+            while True:
+                await asyncio.sleep(1)
+                with store.connection() as db:
+                    expire(db)
+        watch = asyncio.create_task(watch_deadlines())
+        try:
+            yield
+        finally:
+            watch.cancel()
+            with suppress(asyncio.CancelledError):
+                await watch
 
     api = FastAPI(title="BlindSpot", lifespan=lifespan, docs_url=None, redoc_url=None)
     api.mount("/static", StaticFiles(directory=WEB), name="static")
@@ -101,12 +117,16 @@ def create_app(directory: Path) -> FastAPI:
         key, revision = headers
         return prepare_version(store, study_id, revision, key)
 
-    @api.post("/studies/{study_id}/start")
+    @api.post("/studies/{study_id}/start", status_code=202)
     def start(study_id: str, headers=Depends(command_headers)):
-        _, revision = headers
-        study = store.detail(study_id)
-        store.check_state(study, revision, {"подготовлена"})
-        raise StudyError(409, "baseline_unavailable", "Базовый расчёт пока недоступен.")
+        from .baseline import start
+        key, revision = headers
+        return start(store, study_id, revision, key)
+
+    @api.get("/studies/{study_id}/predictions")
+    def predictions(study_id: str):
+        from .baseline import predictions
+        return FileResponse(predictions(store, study_id), filename="predictions.parquet")
 
     return api
 

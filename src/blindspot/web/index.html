@@ -56,6 +56,14 @@
         <button type="button" id="prepare" hidden>Подготовить выборки</button>
         <ul id="issues"></ul>
         <button type="button" id="validate" hidden>Проверить материалы</button>
+        <button type="button" id="start" class="primary" hidden>Запустить базовый расчёт</button>
+        <section id="baseline" hidden aria-labelledby="baseline-title">
+          <h3 id="baseline-title">Базовое качество на поисковой выборке</h3>
+          <p id="baseline-state" role="status"></p>
+          <p id="baseline-budget" class="metadata"></p>
+          <div id="metrics"></div>
+          <a id="predictions" hidden download>Скачать прогнозы по строкам (Parquet)</a>
+        </section>
       </section>
     </section>
     <p id="status" role="status">Загрузка исследований…</p>
