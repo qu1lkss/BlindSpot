@@ -29,7 +29,8 @@ def search_spec(store, study_id):
     if expected.keys() != SEARCH_FILES or actual != SEARCH_FILES or any(p.is_symlink() for p in folder.iterdir()):
         raise StudyError(409, "search_files", "Состав поискового каталога изменился.")
     policy = json.loads((root / "inputs/policy.json").read_text(encoding="utf-8-sig"))
-    return {"id": study_id, "hashes": expected, "memory_mb": policy["memory_mb"],
+    from .history import completed_history
+    return {"id": study_id, "history": completed_history(store, study_id), "hashes": expected, "memory_mb": policy["memory_mb"],
             "disk_mb": policy["disk_mb"], "seconds": policy["seconds"]["search"]}
 
 
@@ -70,6 +71,15 @@ def check_search_input(job):
 if __name__ == "__main__":
     if sys.argv[1:] == ["check"]:
         output = check_search_input(json.load(sys.stdin))
+    elif sys.argv[1:] in (["context"], ["sync"]):
+        from .knowledge import retrieve, synchronize
+        job = json.load(sys.stdin)
+        check_search_input(job)
+        arguments = Path("/input"), Path("/index"), job["id"]
+        if sys.argv[1] == "sync":
+            output = synchronize(*arguments, job["history"])
+        else:
+            output = retrieve(*arguments, job["method"], job["feature"], job["query"], job["history"])
     elif sys.argv[1:] == ["baseline"]:
         from .baseline_compute import compute_baseline
         job = json.load(sys.stdin)

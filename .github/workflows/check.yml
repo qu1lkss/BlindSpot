@@ -25,5 +25,7 @@ jobs:
           dispatcher=$!
           trap 'kill "$dispatcher" || true' EXIT
           docker run --rm --network container:blindspot-controller-1 -v "$PWD/tests:/app/tests:ro" -v "$PWD/examples:/app/examples:ro" blindspot-controller:0.1.0 python tests/e2e/check_baseline.py http://127.0.0.1:8000 examples/binary
+      - name: Проверить контекст до и после базового опыта
+        run: python3 tests/e2e/check_context.py http://127.0.0.1:8765 /tmp/control.json
       - if: always()
         run: docker compose down

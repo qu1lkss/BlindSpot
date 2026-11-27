@@ -25,6 +25,12 @@ def process(project):
         elif isinstance(error, subprocess.CalledProcessError) and error.stderr:
             reason = error.stderr.strip().splitlines()[-1][:400]
         command("fail", study, task, body={"reason": reason})
+    else:
+        # Повтор после сбоя синхронизации безопасен: извлечение сверяет индекс с сохранёнными опытами.
+        try:
+            launch(study, project, action="sync")
+        except (ValueError, OSError, subprocess.SubprocessError) as error:
+            print(f"Не удалось обновить индекс версии {study}: {error}", flush=True)
     return True
 
 
